@@ -28,6 +28,8 @@
 #define INPUTFLOAT 0
 #define INPUT 1
 #define OUTPUT 2
+
+#define DISABLED -20
 ////////////////////////////////////////////////////////////////////////
 #define wait(seconds) zWait((seconds) * 1000) // because floating point math at runtime was huge
 ////////////////////////////////////////////////////////////////////////
@@ -91,13 +93,13 @@ void zDigitalWrite(int pin, int value){
 }
 ////////////////////////////////////////////////////////////////////////
 void digitalWrite(int pin, int value){ // mask for dw function that disables aw
-	analogWrite(pin, -1); // disable analog write
+	analogWrite(pin, DISABLED); // disable analog write
 	zDigitalWrite(pin, value);
 }
 ////////////////////////////////////////////////////////////////////////
 void setPinMode(int pin, int mode){
 	int bit;
-	analogWrite(pin, -1); // disable analog write
+	analogWrite(pin, DISABLED); // disable analog write
 	bit=pinBit(pin); // to avoid redundancy
 	switch(mode){
 		case INPUTFLOAT:
@@ -127,7 +129,7 @@ void setPinMode(int pin, int mode){
 			zDigitalWrite(pin, LOW); // set LOW
 			switch(pin/10){
 				case 1:
-					P2REN &= ~bit; // disable pull just in case
+					P1REN &= ~bit; // disable pull just in case
 					P1DIR |= bit; // set output
 					break;
 				case 2:
@@ -207,7 +209,7 @@ void main(void){
 	
 	__enable_interrupt(); // Clear the timer and enable timer interrupt
 	
-	analogCalibrate(); // This takes 8 seconds
+//	analogCalibrate(); // This takes 8 seconds
 	
 	setPinMode(26, INPUT);
 	while(digitalRead(26)==LOW){ // wait to pull the pin
