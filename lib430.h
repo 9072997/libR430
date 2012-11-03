@@ -209,7 +209,7 @@ void main(void){
 	
 	__enable_interrupt(); // Clear the timer and enable timer interrupt
 	
-//	analogCalibrate(); // This takes 8 seconds
+	analogCalibrate(); // This takes 8 seconds
 	
 	pinMode(26, INPUT);
 	while(digitalRead(26)==LOW){ // wait to pull the pin
