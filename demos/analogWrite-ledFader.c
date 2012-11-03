@@ -1,5 +1,5 @@
 /*
- * led-pwm-demo.c
+ * analogWrite-ledFader.c
  * Copyright (C) 2012  Jon Penn
  *  
  * This program is free software: you can redistribute it and/or modify
@@ -14,24 +14,41 @@
 
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ * This is a demo of the analogWrite function. It does software pwm.
+ * This demo uses the red and green leds on the launchpad on pins 10 and
+ * 16.
+ * 
+ * the syntax is: analogWrite(int pin, int value)
+ * pin: the pin with the port as the first decimil digit and the bit as
+ * 		second digit.
+ * value: a percentage (0 to 100 inclusive). NOTE: this function has a
+ * 		resolution of 5 (seps at 20% intervals).
+ * 
  */
 
 #include "robotlib.h"
 
 void greenFlag(){
-	int i;
-	setPinMode(10, OUTPUT);
-	setPinMode(16, OUTPUT);
-	for(;;){
-		for(i=0; i<100; i+=20){
-			analogWrite(10, i);
-			analogWrite(16, 100-i);
-			wait(1);
+	int i; // this is usesed as a counter in the for loops
+	
+	setPinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use analogWrite on it
+	setPinMode(16, OUTPUT); // set pin 16 (green led) as output so we can use analogWrite on it
+	
+	for(;;){ // foreaver. i will be {0, 20, 40, 60, 80, 100, 80, 60, 40, 20} over one loop
+		
+		for(i=0; i<100; i+=20){ // i will be {0, 20, 40, 60, 80} over this loop (remember the analogWrite function only changes as 20% intervals)
+			analogWrite(10, i); // i will be {0, 20, 40, 60, 80}
+			analogWrite(16, 100-i); // 100-i will be {100, 80, 60, 40, 20} ("opisite" of the red led)
+			wait(1); // wait 1 second between steps so humans can see
 		}
-		for(;i>=0; i-=20){
-			analogWrite(10, i);
-			analogWrite(16, 100-i);
-			wait(1);
+		// i is 100 here
+		for(;i>=0; i-=20){ // i will be {100, 80, 60, 40, 20} over this loop
+			analogWrite(10, i); // i will be {100, 80, 60, 40, 20}
+			analogWrite(16, 100-i); // 100-i will be {0, 20, 40, 60, 80} ("opisite" of the red led)
+			wait(1); // wait 1 second between steps so humans can see
 		}
-	}
+		
+	} // and repete
 }

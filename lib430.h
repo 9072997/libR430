@@ -229,7 +229,7 @@ __interrupt void Timer_A(void){ // Timer A0 interrupt service routine
 				int pin;
 				
 				switch(port){
-					case 0:pin= 10 + bit; break;
+					case 0:pin= 10 + bit; break; // get human readible pin numbers for digitalWrite
 					case 1:pin= 20 + bit;
 				}
 				
