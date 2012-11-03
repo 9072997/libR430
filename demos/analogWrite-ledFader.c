@@ -23,8 +23,8 @@
  * the syntax is: analogWrite(int pin, int value)
  * pin: the pin with the port as the first decimil digit and the bit as
  * 		second digit.
- * value: a percentage (0 to 100 inclusive). NOTE: this function has a
- * 		resolution of 5 (seps at 20% intervals).
+ * value: a percentage (0 to 100 inclusive) or DISABLED. NOTE: this
+ * 		function has a resolution of 5 (seps at 20% intervals).
  * 
  */
 
