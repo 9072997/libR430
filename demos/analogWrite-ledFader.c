@@ -28,10 +28,10 @@
  * 
  */
 
-#include "robotlib.h"
+#include <lib430.h>
 
 void greenFlag(){
-	int i; // this is usesed as a counter in the for loops
+	int i; // this is used as a counter in the for loops
 	
 	setPinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use analogWrite on it
 	setPinMode(16, OUTPUT); // set pin 16 (green led) as output so we can use analogWrite on it
