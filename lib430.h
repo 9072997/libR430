@@ -97,7 +97,7 @@ void digitalWrite(int pin, int value){ // mask for dw function that disables aw
 	zDigitalWrite(pin, value);
 }
 ////////////////////////////////////////////////////////////////////////
-void setPinMode(int pin, int mode){
+void pinMode(int pin, int mode){
 	int bit;
 	analogWrite(pin, DISABLED); // disable analog write
 	bit=pinBit(pin); // to avoid redundancy
@@ -211,7 +211,7 @@ void main(void){
 	
 //	analogCalibrate(); // This takes 8 seconds
 	
-	setPinMode(26, INPUT);
+	pinMode(26, INPUT);
 	while(digitalRead(26)==LOW){ // wait to pull the pin
 		random(); // so we get a random initial value
 		wait(0.2);
