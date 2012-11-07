@@ -33,8 +33,8 @@
 void greenFlag(){
 	int i; // this is used as a counter in the for loops
 	
-	setPinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use analogWrite on it
-	setPinMode(16, OUTPUT); // set pin 16 (green led) as output so we can use analogWrite on it
+	pinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use analogWrite on it
+	pinMode(16, OUTPUT); // set pin 16 (green led) as output so we can use analogWrite on it
 	
 	for(;;){ // foreaver. i will be {0, 20, 40, 60, 80, 100, 80, 60, 40, 20} over one loop
 		
