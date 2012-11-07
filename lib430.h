@@ -29,7 +29,11 @@
 ////////////////////////////////////////////////////////////////////////
 #define wait(seconds) waitMsec((seconds) * 1000) // because floating point math at runtime was huge
 ////////////////////////////////////////////////////////////////////////
-int pinBit(int);
+#ifndef __GNUC__
+#define  __attribute__(x)  /*NOTHING*/
+#endif
+////////////////////////////////////////////////////////////////////////
+int  __attribute__((const)) pinBit(int);
 void analogWrite(int, int);
 void waitMsec(int);
 void digitalWrite(int, int);
