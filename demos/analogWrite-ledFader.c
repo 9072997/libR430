@@ -44,7 +44,7 @@ void greenFlag(){
 			wait(1); // wait 1 second between steps so humans can see
 		}
 		// i is 100 here
-		for(;i>=0; i-=20){ // i will be {100, 80, 60, 40, 20} over this loop
+		for(;i>0; i-=20){ // i will be {100, 80, 60, 40, 20} over this loop
 			analogWrite(10, i); // i will be {100, 80, 60, 40, 20}
 			analogWrite(16, 100-i); // 100-i will be {0, 20, 40, 60, 80} ("opisite" of the red led)
 			wait(1); // wait 1 second between steps so humans can see
