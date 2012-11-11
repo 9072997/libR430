@@ -30,7 +30,7 @@
 
 #include <lib430.h>
 
-void greenFlag(){
+void main(){
 	int i; // this is used as a counter in the for loops
 	
 	pinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use analogWrite on it

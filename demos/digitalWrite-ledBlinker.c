@@ -29,7 +29,7 @@
 
 #include <lib430.h>
 
-void greenFlag(){
+void main(){
 	pinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use digitalWrite on it
 	pinMode(16, OUTPUT); // set pin 16 (green led) as output so we can use digitalWrite on it
 

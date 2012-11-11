@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#ifndef LIB430_H
+#define LIB430_H
+////////////////////////////////////////////////////////////////////////
 #define LOW 0
 #define OFF 0
 #define HIGH 1
@@ -26,6 +28,8 @@
 #define OUTPUT 2
 
 #define DISABLED -20
+
+#define main() zMain()
 ////////////////////////////////////////////////////////////////////////
 #define wait(seconds) waitMsec((seconds) * 1000) // because floating point math at runtime was huge
 ////////////////////////////////////////////////////////////////////////
@@ -42,4 +46,6 @@ int digitalRead(int);
 int analogRead(int);
 int random(void);
 void analogCalibrate(void);
-void greenFlag(void); // so that the user's code may follow our own.
+void zMain(void); // so that the user's code may follow our own.
+////////////////////////////////////////////////////////////////////////
+#endif

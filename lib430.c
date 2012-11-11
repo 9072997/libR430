@@ -18,7 +18,8 @@
 
 #include <msp430g2231.h>
 #include <lib430.h>
-
+////////////////////////////////////////////////////////////////////////
+#undef main
 ////////////////////////////////////////////////////////////////////////
 int zInteruptCounter=0; // counts from 0 to 4
 int zAnalogWrite[2][8]={{-1, -1, -1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1, -1, -1}}; // holds values as [port][pin]
@@ -205,7 +206,7 @@ void main(void){
 		wait(0.2);
 	}
 	
-	greenFlag(); // exicute user code
+	zMain(); // exicute user code
 	for(;;){} // stop after user's code is done
 }
 ////////////////////////////////////////////////////////////////////////
