@@ -21,8 +21,8 @@
 
 ////////////////////////////////////////////////////////////////////////
 int zInteruptCounter=0; // counts from 0 to 4
-char zAnalogWrite[2][8]={{-1, -1, -1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1, -1, -1}}; // holds values as [port][pin]
-char zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets		These 2 are char arrays because of their size
+int zAnalogWrite[2][8]={{-1, -1, -1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1, -1, -1}}; // holds values as [port][pin]
+int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
 int zRandom=1; // store random state
 ////////////////////////////////////////////////////////////////////////
 int pinBit(int pin){
