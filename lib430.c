@@ -186,8 +186,6 @@ void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 	}
 }
 ////////////////////////////////////////////////////////////////////////
-void greenFlag(); // so that the user's code may follow our own.
-////////////////////////////////////////////////////////////////////////
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
 	

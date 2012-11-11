@@ -42,4 +42,4 @@ int digitalRead(int);
 int analogRead(int);
 int random(void);
 void analogCalibrate(void);
-void greenFlag(); // so that the user's code may follow our own.
+void greenFlag(void); // so that the user's code may follow our own.
