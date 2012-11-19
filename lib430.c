@@ -137,14 +137,12 @@ int digitalRead(int pin){
 			}else{
 				return LOW;
 			}
-			break;
 		case 2:
 			if(P2IN & bit){ // read 1 bit from P2IN
 				return HIGH;
 			}else{
 				return LOW;
 			}
-			break;
 		default:
 			return LOW; // no pin 30, sorry
 	}
