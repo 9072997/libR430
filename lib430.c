@@ -40,20 +40,6 @@ int pinBit(int pin){
 	}
 }
 ////////////////////////////////////////////////////////////////////////
-void analogWrite(int pin, int value){
-	switch(pin/10){
-		case 1:
-			zAnalogWrite[0][pin % 10]=value/20;
-			break;
-		case 2:
-			zAnalogWrite[1][pin % 10]=value/20;
-	}
-	
-	if(value==DISABLED){ // if we are disableing the pin
-		zDigitalWrite(pin, LOW);
-	}
-}
-////////////////////////////////////////////////////////////////////////
 void waitMsec(int miliseconds){ // macros will replace wait(x) with waitMsec(x*1000)
 	while (miliseconds--){
 		__delay_cycles(998); // the extra 2 are for loop overhead 
@@ -81,6 +67,20 @@ void zDigitalWrite(int pin, int value){
 				case 2:
 					P2OUT &= ~bit;
 			}
+	}
+}
+////////////////////////////////////////////////////////////////////////
+void analogWrite(int pin, int value){
+	switch(pin/10){
+		case 1:
+			zAnalogWrite[0][pin % 10]=value/20;
+			break;
+		case 2:
+			zAnalogWrite[1][pin % 10]=value/20;
+	}
+	
+	if(value==DISABLED){ // if we are disableing the pin
+		zDigitalWrite(pin, LOW); // also set it to low
 	}
 }
 ////////////////////////////////////////////////////////////////////////
