@@ -29,7 +29,6 @@
 #include <lib430.h>
 
 void main(){
-	int i; // this is used as a counter in the for loops
 	
 	pinMode(11, INPUT); // we get information IN from pin 11 because it has a light sensor atached
 	pinMode(12, INPUT); // pin 12 also
