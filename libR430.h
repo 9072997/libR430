@@ -1,5 +1,5 @@
 /*
- * lib430.h
+ * libR430.h
  * Copyright (C) 2012  Jon Penn
  *  
  * This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef LIB430_H
-#define LIB430_H
+#ifndef LIBR430_H
+#define LIBR430_H
 ////////////////////////////////////////////////////////////////////////
 #define LOW 0
 #define OFF 0

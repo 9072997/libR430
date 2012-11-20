@@ -28,7 +28,7 @@
  * 
  */
 
-#include <lib430.h>
+#include <libR430.h>
 
 void main(){
 	int i; // this is used as a counter in the for loops

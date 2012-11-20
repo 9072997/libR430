@@ -26,7 +26,7 @@
  * 
  */
 
-#include <lib430.h>
+#include <libR430.h>
 
 void main(){
 	

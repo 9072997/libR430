@@ -1,5 +1,5 @@
 /*
- * lib430.c
+ * libR430.c
  * Copyright (C) 2012  Jon Penn
  *  
  * This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  */
 
 #include <msp430g2231.h>
-#include <lib430.h>
+#include <libR430.h>
 ////////////////////////////////////////////////////////////////////////
 #undef main
 ////////////////////////////////////////////////////////////////////////

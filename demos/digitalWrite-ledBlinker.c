@@ -27,7 +27,7 @@
  * 
  */
 
-#include <lib430.h>
+#include <libR430.h>
 
 void main(){
 	pinMode(10, OUTPUT); // set pin 10 (red led) as output so we can use digitalWrite on it
