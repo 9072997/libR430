@@ -48,6 +48,10 @@ void analogWrite(int pin, int value){
 		case 2:
 			zAnalogWrite[1][pin % 10]=value/20;
 	}
+	
+	if(value==DISABLED){ // if we are disableing the pin
+		zDigitalWrite(pin, LOW);
+	}
 }
 ////////////////////////////////////////////////////////////////////////
 void waitMsec(int miliseconds){ // macros will replace wait(x) with waitMsec(x*1000)
