@@ -20,8 +20,8 @@
 ////////////////////////////////////////////////////////////////////////
 #define LOW 0
 #define OFF 0
-#define HIGH 1
-#define ON 1
+#define HIGH 100
+#define ON 100
 
 #define INPUTFLOAT 0
 #define INPUT 1
