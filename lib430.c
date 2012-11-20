@@ -164,10 +164,7 @@ int analogRead(int pin){
 		while(ADC10CTL1 & ADC10BUSY){} // wait until analog read is done
 		return ADC10MEM/10+zAnalogRead[pin]; // divide by 10 so we have (roughly) a percentage
 	}else{ // pin does not support analog read, so output 100% for LOW or 0% for LOW
-		switch(digitalRead(pin)){
-			case HIGH: return 100;
-			default: return 0; // includes case LOW:
-		}
+		return digitalRead(pin);
 	}
 }
 ////////////////////////////////////////////////////////////////////////
