@@ -28,7 +28,7 @@
 #define OUTPUT 2
 
 #define DISABLED -20
-
+////////////////////////////////////////////////////////////////////////
 #define main() zMain()
 ////////////////////////////////////////////////////////////////////////
 #define wait(seconds) waitMsec((seconds) * 1000) // because floating point math at runtime was huge
@@ -38,14 +38,15 @@
 #endif
 ////////////////////////////////////////////////////////////////////////
 int  __attribute__((const)) pinBit(int);
-void analogWrite(int, int);
 void waitMsec(long);
-void digitalWrite(int, int);
+void analogWrite(int, int);
+void digitalWrite(int pin, int value);
 void pinMode(int, int);
 int digitalRead(int);
 int analogRead(int);
 int random(void);
 void analogCalibrate(void);
+void setMhz(int);
 void zMain(void); // so that the user's code may follow our own.
 ////////////////////////////////////////////////////////////////////////
 #endif
