@@ -200,6 +200,7 @@ void setMhz(int mhz){
 			BCSCTL1 |= 13;
 			zMhz=8; // for software delay.
 			break;
+	}
 }
 ////////////////////////////////////////////////////////////////////////
 void main(void){
