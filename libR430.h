@@ -39,7 +39,7 @@
 ////////////////////////////////////////////////////////////////////////
 int  __attribute__((const)) pinBit(int);
 void analogWrite(int, int);
-void waitMsec(int);
+void waitMsec(long);
 void digitalWrite(int, int);
 void pinMode(int, int);
 int digitalRead(int);

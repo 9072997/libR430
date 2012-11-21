@@ -21,6 +21,7 @@
 ////////////////////////////////////////////////////////////////////////
 #undef main
 ////////////////////////////////////////////////////////////////////////
+int zMhz=1; // so our wait function can account for changes in frequency
 int zInteruptCounter=0; // counts from 0 to 4
 int zAnalogWrite[2][8]={{-1, -1, -1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1, -1, -1}}; // holds values as [port][pin]
 int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
@@ -40,9 +41,10 @@ int pinBit(int pin){
 	}
 }
 ////////////////////////////////////////////////////////////////////////
-void waitMsec(int miliseconds){ // macros will replace wait(x) with waitMsec(x*1000)
+void waitMsec(long miliseconds){ // macros will replace wait(x) with waitMsec(x*1000)
+	miliseconds*=zMhz; // compensate for frequency
 	while (miliseconds--){
-		__delay_cycles(998); // the extra 2 are for loop overhead 
+		__delay_cycles(998); // wait 10 msec the extra 2 are for loop overhead 
 	}
 }
 ////////////////////////////////////////////////////////////////////////
@@ -188,6 +190,10 @@ void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 ////////////////////////////////////////////////////////////////////////
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
+	
+	BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
+	DCOCTL = CALDCO_1MHZ;
+	zMhz=1; // for software delay.
 	
 	P2SEL &= 0x3F; // gpio insted of xin/xout
 	
