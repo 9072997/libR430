@@ -188,12 +188,25 @@ void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 	}
 }
 ////////////////////////////////////////////////////////////////////////
+void setMhz(int mhz){
+	switch(mhz){
+		case 1:
+			BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
+			DCOCTL = CALDCO_1MHZ;
+			zMhz=1; // for software delay.
+			break;
+		case 8:
+			BCSCTL1 &= ~(0x0F); // some values I found on the internet for 8MHz
+			BCSCTL1 |= 13;
+			zMhz=8; // for software delay.
+			break;
+	}
+}
+////////////////////////////////////////////////////////////////////////
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
 	
-	BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
-	DCOCTL = CALDCO_1MHZ;
-	zMhz=1; // for software delay.
+	setMhz(1);
 	
 	P2SEL &= 0x3F; // gpio insted of xin/xout
 	
