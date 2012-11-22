@@ -27,19 +27,13 @@
 			<div id="site_content">
 				<div class="sidebar">
 					<!-- insert your sidebar items here -->
+					<h3>Recent Posts</h3>
 					{% for post in site.posts limit:5 %}
 						<a href="/libR430{{ post.url }}">
 							<h4>{{ post.title }}</h4>
 							<h5>{{ post.date | date: "%B %e, %Y" }}</h5>
 						</a>
 					{% endfor %}
-					<h3>Search</h3>
-					<form method="post" action="#" id="search_form">
-						<p>
-							<input class="search" type="text" name="search_field" value="Enter keywords....." />
-							<input name="search" type="image" style="border: 0; margin: 0 0 -9px 5px;" src="/libR430/style/search.png" alt="Search" title="Search" />
-						</p>
-					</form>
 				</div>
 				{% if page.title != 'Home' %}
 					<h1>{{ page.title }}</h1>
