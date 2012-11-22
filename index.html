@@ -5,12 +5,10 @@ title: Home
 
 <div class="content">
 	<div class="related">
-		<ul>
-			{% for post in site.posts %}
-				<a href="/libR430{{ post.url }}"><h2>{{ post.title }}</h2></a>
-				<h5>{{ post.date | date: "%B %e, %Y" }}</h5>
-				{{ post.content }}
-			{% endfor %}
-		</ul>
+		{% for post in site.posts %}
+			<a href="/libR430{{ post.url }}"><h2>{{ post.title }}</h2></a>
+			<h5>{{ post.date | date: "%B %e, %Y" }}</h5>
+			{{ post.content }}
+		{% endfor %}
 	</div>
 </div>
