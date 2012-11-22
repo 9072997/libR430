@@ -27,7 +27,7 @@ int zRandom=1; // store random state
 unsigned char zAnalogWrite[2][8]={{127, 127, 127, 127, 127, 127, 127, 127}, {127, 127, 127, 127, 127, 127, 127, 127}}; // holds values as [port][pin] (chars to save RAM)
 int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
 const char zBit[8]={0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-const unsigned char zSpeed[16]={1, 1, 2, 3, 4, 6, 8, 12, 16, 23, 34, 43, 58, 78, 113, 152}; // MHz*10 values by RSELx values from datasheet
+const unsigned char zSpeed[16]={1, 2, 2, 3, 4, 6, 8, 12, 16, 23, 34, 43, 58, 78, 113, 152}; // MHz*10 values by RSELx values from datasheet
 ////////////////////////////////////////////////////////////////////////
 void wait10Miliseconds(long miliseconds){ // macros will replace wait(x) with waitMsec(x*100)
 	miliseconds*=zWait; // compensate for frequency
@@ -176,18 +176,18 @@ void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 	}
 }
 ////////////////////////////////////////////////////////////////////////
-void setSpeed(int value){
-	switch(value){
+void setSpeed(int speed){
+	switch(speed){
 		case CAL1MHZ:
 			BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_1MHZ;
 			break;
 		default:
-			if(value>=0 && value<=15){ //sanity check
+			if(speed>=0 && speed<=15){ //sanity check
 				BCSCTL1 &= ~(0x0F);
-				BCSCTL1 |= value; // value is RSELx
+				BCSCTL1 |= speed; // value is RSELx
 				
-				zWait=zSpeed[value]; // so our wait function can compensate
+				zWait=zSpeed[speed]; // so our wait function can compensate
 			}
 			break;
 	}
@@ -196,7 +196,7 @@ void setSpeed(int value){
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
 	
-	setSpeed(CAL1MHZ); // ~8MHz
+	setSpeed(13); // ~8MHz
 	
 	P2SEL &= 0x3F; // gpio insted of xin/xout
 	
