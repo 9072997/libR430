@@ -206,7 +206,7 @@ void setMhz(int mhz){
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
 	
-	setMhz(1);
+	setMhz(8);
 	
 	P2SEL &= 0x3F; // gpio insted of xin/xout
 	
