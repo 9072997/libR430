@@ -8,7 +8,7 @@ title: Home
 		<ul>
 			{% for post in site.posts %}
 				<a href="/libR430{{ post.url }}"><h2>{{ post.title }}</h2></a>
-				<h3>{{ post.date | date: "%B %e, %Y" }}</h3>
+				<h5>{{ post.date | date: "%B %e, %Y" }}</h5>
 				{{ post.content }}
 			{% endfor %}
 		</ul>
