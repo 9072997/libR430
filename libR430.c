@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////
 int zMhz=1; // so our wait function can account for changes in frequency
 int zInteruptCounter=0; // counts from 0 to 4
-int zAnalogWrite[2][8]={{-1, -1, -1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1, -1, -1}}; // holds values as [port][pin]
+char zAnalogWrite[2][8]={{127, 127, 127, 127, 127, 127, 127, 127}, {127, 127, 127, 127, 127, 127, 127, 127}}; // holds values as [port][pin] (chars to save RAM)
 int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
 int zRandom=1; // store random state
 ////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ __interrupt void Timer_A(void){ // Timer A0 interrupt service routine
 	zInteruptCounter=(zInteruptCounter + 1) % 5; // 0 to 4
 	for(port=0; port<2; port++){ // loop through ports [0] and [1] (1 and 2)
 		for(bit=0; bit<8; bit++){ // loop through pins 0 to 7
-			if(zAnalogWrite[port][bit]!=-1){ // if analog write is enabled
+			if(zAnalogWrite[port][bit]!=DISABLED/20){ // if analog write is enabled
 				int pin;
 				
 				switch(port){
