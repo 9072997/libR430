@@ -21,36 +21,24 @@
 ////////////////////////////////////////////////////////////////////////
 #undef main
 ////////////////////////////////////////////////////////////////////////
-int zMhz=1; // so our wait function can account for changes in frequency
-int zInteruptCounter=0; // counts from 0 to 4
-char zAnalogWrite[2][8]={{127, 127, 127, 127, 127, 127, 127, 127}, {127, 127, 127, 127, 127, 127, 127, 127}}; // holds values as [port][pin] (chars to save RAM)
-int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
+int zWait=12; // so our wait function can account for changes in frequency
+unsigned char zInteruptCounter=0; // counts from 0 to 4 (datatype is for optimization)
 int zRandom=1; // store random state
+unsigned char zAnalogWrite[2][8]={{127, 127, 127, 127, 127, 127, 127, 127}, {127, 127, 127, 127, 127, 127, 127, 127}}; // holds values as [port][pin] (chars to save RAM)
+int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
+const char zBit[8]={0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+const unsigned char zSpeed[16]={1, 1, 2, 3, 4, 6, 8, 12, 16, 23, 34, 43, 58, 78, 113, 152}; // MHz*10 values by RSELx values from datasheet
 ////////////////////////////////////////////////////////////////////////
-int pinBit(int pin){
-	switch(pin % 10){
-		case 0:return 0x01;
-		case 1:return 0x02;
-		case 2:return 0x04;
-		case 3:return 0x08;
-		case 4:return 0x10;
-		case 5:return 0x20;
-		case 6:return 0x40;
-		case 7:return 0x80;
-		default:return 0x0; // 00000000 in binary
-	}
-}
-////////////////////////////////////////////////////////////////////////
-void waitMsec(long miliseconds){ // macros will replace wait(x) with waitMsec(x*1000)
-	miliseconds*=zMhz; // compensate for frequency
+void wait10Miliseconds(long miliseconds){ // macros will replace wait(x) with waitMsec(x*100)
+	miliseconds*=zWait; // compensate for frequency
 	while (miliseconds--){
-		__delay_cycles(998); // wait 10 msec the extra 2 are for loop overhead 
+		__delay_cycles(998); // wait .1 msec the extra 2 are for loop overhead 
 	}
 }
 ////////////////////////////////////////////////////////////////////////
 void zDigitalWrite(int pin, int value){
 	int bit;
-	bit=pinBit(pin);
+	bit=zBit[pin%10];
 	switch(value){
 		case HIGH:
 			switch(pin/10){
@@ -94,7 +82,7 @@ void digitalWrite(int pin, int value){ // mask for dw function that disables aw
 void pinMode(int pin, int mode){
 	int bit;
 	analogWrite(pin, DISABLED); // disable analog write
-	bit=pinBit(pin); // to avoid redundancy
+	bit=zBit[pin%10]; // to avoid redundancy
 	switch(mode){
 		case INPUTFLOAT:
 			switch(pin/10){
@@ -135,7 +123,7 @@ void pinMode(int pin, int mode){
 ////////////////////////////////////////////////////////////////////////
 int digitalRead(int pin){
 	int bit;
-	bit=pinBit(pin);
+	bit=zBit[pin%10];
 	switch(pin/10){
 		case 1:
 			if(P1IN & bit){ // read 1 bit from P1IN
@@ -188,17 +176,19 @@ void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 	}
 }
 ////////////////////////////////////////////////////////////////////////
-void setMhz(int mhz){
-	switch(mhz){
-		case 1:
+void setSpeed(int value){
+	switch(value){
+		case CAL1MHZ:
 			BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_1MHZ;
-			zMhz=1; // for software delay.
 			break;
-		case 8:
-			BCSCTL1 &= ~(0x0F); // some values I found on the internet for 8MHz
-			BCSCTL1 |= 13;
-			zMhz=8; // for software delay.
+		default:
+			if(value>=0 && value<=15){ //sanity check
+				BCSCTL1 &= ~(0x0F);
+				BCSCTL1 |= value; // value is RSELx
+				
+				zWait=zSpeed[value]; // so our wait function can compensate
+			}
 			break;
 	}
 }
@@ -206,7 +196,7 @@ void setMhz(int mhz){
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
 	
-	setMhz(8);
+	setSpeed(CAL1MHZ); // ~8MHz
 	
 	P2SEL &= 0x3F; // gpio insted of xin/xout
 	
