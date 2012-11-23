@@ -1,5 +1,5 @@
 /*
- * tutorial-helloWorld.c
+ * tutorial1-myProgram.c
  * Copyright (C) 2012  Jon Penn
  *  
  * This program is free software: you can redistribute it and/or modify
