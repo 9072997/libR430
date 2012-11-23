@@ -1,6 +1,5 @@
 What is this?
 ======
-
 A Wiring-like library for the MSP430 line of chips for abstracting many of the complexities of robot programming in C
 
 How do I use it?
@@ -10,7 +9,6 @@ http://github.com/9072997/libR430/wiki/Tutorial-1:-Flashlight
 
 Licence
 ======
-
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
