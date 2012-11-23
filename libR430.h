@@ -33,13 +33,13 @@
 ////////////////////////////////////////////////////////////////////////
 #define main() zMain()
 ////////////////////////////////////////////////////////////////////////
-#define wait(seconds) wait10Miliseconds((seconds) * 100) // because floating point math at runtime was huge
+#define wait(seconds) wait10Milliseconds((seconds) * 100) // because floating point math at runtime was huge
 ////////////////////////////////////////////////////////////////////////
 #ifndef __GNUC__
 #define  __attribute__(x)  /*NOTHING*/
 #endif
 ////////////////////////////////////////////////////////////////////////
-void wait10Miliseconds(long);
+void wait10Milliseconds(long);
 void analogWrite(int, int);
 void digitalWrite(int pin, int value);
 void pinMode(int, int);

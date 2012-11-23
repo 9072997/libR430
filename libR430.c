@@ -29,9 +29,9 @@ int zAnalogRead[8]={0, 0, 0, 0, 0, 0, 0, 0}; // holds offsets
 const char zBit[8]={0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 const unsigned char zSpeed[16]={1, 2, 2, 3, 4, 6, 8, 12, 16, 23, 34, 43, 58, 78, 113, 152}; // MHz*10 values by RSELx values from datasheet
 ////////////////////////////////////////////////////////////////////////
-void wait10Miliseconds(long miliseconds){ // macros will replace wait(x) with waitMsec(x*100)
-	miliseconds*=zWait; // compensate for frequency
-	while (miliseconds--){
+void wait10Milliseconds(long milliseconds){ // macros will replace wait(x) with waitMsec(x*100)
+	milliseconds*=zWait; // compensate for frequency
+	while (milliseconds--){
 		__delay_cycles(998); // wait .1 msec the extra 2 are for loop overhead 
 	}
 }
