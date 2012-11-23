@@ -3,6 +3,10 @@ What is this?
 
 A Wiring-like library for the MSP430 line of chips for abstracting many of the complexities of robot programming in C
 
+How do I use it?
+======
+Check out the tutorial here:
+http://github.com/9072997/libR430/wiki/Tutorial-1:-Flashlight
 
 Licence
 ======
