@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <msp430g2231.h>
+#include <msp430.h>
 #include <libR430.h>
 ////////////////////////////////////////////////////////////////////////
 #undef main
