@@ -168,7 +168,7 @@ void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 	for(i=0; i<8; i++){ // loop from 0 to 7 inclusive 
 		sum=0; // used for averageing
 		for(n=0; n<10; n++){ // average 10 consecutive reads
-			wait(.1); // so we do not overload the analog sensor
+			wait(.01); // so we do not overload the analog sensor
 			sum+=analogRead(i+10);
 		}
 		
