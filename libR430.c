@@ -218,7 +218,7 @@ void main(void){
 	for(;;); // stop after user's code is done
 }
 ////////////////////////////////////////////////////////////////////////
-#pragma vector=TIMERA0_VECTOR
+#pragma vector=TIMER0_A0_VECTOR
 __interrupt void Timer_A(void){ // Timer A0 interrupt service routine
 	int port, bit;
 	zInteruptCounter=(zInteruptCounter + 1) % 5; // 0 to 4
