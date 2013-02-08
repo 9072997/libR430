@@ -181,6 +181,22 @@ void setSpeed(int speed){
 		case CAL1MHZ:
 			BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_1MHZ;
+			zWait=10; // so our wait function can compensate
+			break;
+		case CAL8MHZ:
+			BCSCTL1 = CALBC1_8MHZ; // set to calibrated 1mhz
+			DCOCTL = CALDCO_8MHZ;
+			zWait=80; // so our wait function can compensate
+			break;
+		case CAL12MHZ:
+			BCSCTL1 = CALBC1_12MHZ; // set to calibrated 1mhz
+			DCOCTL = CALDCO_12MHZ;
+			zWait=120; // so our wait function can compensate
+			break;
+		case CAL16MHZ:
+			BCSCTL1 = CALBC1_16MHZ; // set to calibrated 1mhz
+			DCOCTL = CALDCO_16MHZ;
+			zWait=160; // so our wait function can compensate
 			break;
 		default:
 			if(speed>=0 && speed<=15){ //sanity check
@@ -196,7 +212,7 @@ void setSpeed(int speed){
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
 	
-	setSpeed(13); // ~8MHz
+	setSpeed(CAL8MHZ); // ~8MHz
 	
 	P2SEL &= 0x3F; // gpio insted of xin/xout
 	
