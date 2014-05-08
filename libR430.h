@@ -27,7 +27,7 @@
 #define INPUT 1
 #define OUTPUT 2
 
-#define DISABLED 2540
+#define DISABLED 635
 
 #define CAL1MHZ -1
 #define CAL8MHZ -2
@@ -51,6 +51,7 @@ int analogRead(int);
 int random(void);
 void analogCalibrate(void);
 void setSpeed(int);
+void ready(void);
 void zMain(void); // so that the user's code may follow our own.
 ////////////////////////////////////////////////////////////////////////
 #endif

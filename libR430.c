@@ -1,7 +1,7 @@
 /*
  * libR430.c
  * Copyright (C) 2012  Jon Penn
- *  
+
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -21,7 +21,8 @@
 ////////////////////////////////////////////////////////////////////////
 #undef main
 ////////////////////////////////////////////////////////////////////////
-int zWait=12; // so our wait function can account for changes in frequency
+volatile int zTime=0;
+int zFreq=12; // so our wait function can account for changes in frequency
 unsigned char zInteruptCounter=0; // counts from 0 to 4 (datatype is for optimization)
 int zRandom=1; // store random state
 unsigned char zAnalogWrite[2][8]={{127, 127, 127, 127, 127, 127, 127, 127}, {127, 127, 127, 127, 127, 127, 127, 127}}; // holds values as [port][pin] (chars to save RAM)
@@ -30,10 +31,8 @@ const char zBit[8]={0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 const unsigned char zSpeed[16]={1, 2, 2, 3, 4, 6, 8, 12, 16, 23, 34, 43, 58, 78, 113, 152}; // MHz*10 values by RSELx values from datasheet
 ////////////////////////////////////////////////////////////////////////
 void wait10Milliseconds(long milliseconds){ // macros will replace wait(x) with waitMsec(x*100)
-	milliseconds*=zWait; // compensate for frequency
-	while (milliseconds--){
-		__delay_cycles(998); // wait .1 msec the extra 2 are for loop overhead 
-	}
+	zTime=milliseconds*zFreq/8; // compensate for frequency
+	while(zTime>0); // wait for interupt timer to count down zTime for us
 }
 ////////////////////////////////////////////////////////////////////////
 void zDigitalWrite(int pin, int value){
@@ -63,12 +62,12 @@ void zDigitalWrite(int pin, int value){
 void analogWrite(int pin, int value){
 	switch(pin/10){
 		case 1:
-			zAnalogWrite[0][pin % 10]=value/20;
+			zAnalogWrite[0][pin % 10]=value/5;
 			break;
 		case 2:
-			zAnalogWrite[1][pin % 10]=value/20;
+			zAnalogWrite[1][pin % 10]=value/5;
 	}
-	
+
 	if(value==DISABLED){ // if we are disableing the pin
 		zDigitalWrite(pin, LOW); // also set it to low
 	}
@@ -145,13 +144,14 @@ int digitalRead(int pin){
 int analogRead(int pin){
 	if(pin <= 17){ // aparently the ADC does bad things of the pin numer is wrong
 		pin-=10; // not my function so adjust pin number
-		
+
 		ADC10CTL0 &= ~ENC;
 		ADC10CTL1 = pin << 12;
 		ADC10CTL0 = ADC10ON + ENC + ADC10SHT_0;
 
 		ADC10CTL0 |= ADC10SC;
 		while(ADC10CTL1 & ADC10BUSY); // wait until analog read is done
+		wait(0.01);
 		return ADC10MEM/10+zAnalogRead[pin]; // divide by 10 so we have (roughly) a percentage
 	}else{ // pin does not support analog read, so output 100% for LOW or 0% for LOW
 		return digitalRead(pin);
@@ -165,13 +165,13 @@ int random(void){
 ////////////////////////////////////////////////////////////////////////
 void analogCalibrate(void){ // adition calibrate port 1 analogRead values
 	int i, n, sum;
-	for(i=0; i<8; i++){ // loop from 0 to 7 inclusive 
+	for(i=0; i<8; i++){ // loop from 0 to 7 inclusive
 		sum=0; // used for averageing
 		for(n=0; n<10; n++){ // average 10 consecutive reads
 			wait(.01); // so we do not overload the analog sensor
 			sum+=analogRead(i+10);
 		}
-		
+
 		zAnalogRead[i]-=sum/10; // adjust calibration values so 0 is normal
 	}
 }
@@ -181,54 +181,58 @@ void setSpeed(int speed){
 		case CAL1MHZ:
 			BCSCTL1 = CALBC1_1MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_1MHZ;
-			zWait=10; // so our wait function can compensate
+			zFreq=10; // so our wait function can compensate
 			break;
 		case CAL8MHZ:
 			BCSCTL1 = CALBC1_8MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_8MHZ;
-			zWait=80; // so our wait function can compensate
+			zFreq=80; // so our wait function can compensate
 			break;
 		case CAL12MHZ:
 			BCSCTL1 = CALBC1_12MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_12MHZ;
-			zWait=120; // so our wait function can compensate
+			zFreq=120; // so our wait function can compensate
 			break;
 		case CAL16MHZ:
 			BCSCTL1 = CALBC1_16MHZ; // set to calibrated 1mhz
 			DCOCTL = CALDCO_16MHZ;
-			zWait=160; // so our wait function can compensate
+			zFreq=160; // so our wait function can compensate
 			break;
 		default:
 			if(speed>=0 && speed<=15){ //sanity check
 				BCSCTL1 &= ~(0x0F);
 				BCSCTL1 |= speed; // value is RSELx
-				
-				zWait=zSpeed[speed]; // so our wait function can compensate
+
+				zFreq=zSpeed[speed]; // so our wait function can compensate
 			}
 			break;
 	}
 }
 ////////////////////////////////////////////////////////////////////////
+void ready(void){
+	pinMode(13, INPUT);
+	while(digitalRead(13)==HIGH){ // wait to pull the pin
+		random(); // so we get a random initial value
+		wait(0.05);
+	}
+	pinMode(13, OUTPUT);
+	wait(1); //step back
+}
+////////////////////////////////////////////////////////////////////////
 void main(void){
 	WDTCTL=WDTPW + WDTHOLD; // Stop watchdog timer
-	
+
 	setSpeed(CAL8MHZ); // ~8MHz
-	
+
 	P2SEL &= 0x3F; // gpio insted of xin/xout
-	
+
 	CCTL0=CCIE;
-	CCR0=8192; // counts per interupt
+	CCR0=8000; // counts per interupt
 	TACTL=TASSEL_2 + MC_1; // Set the timer A to SMCLCK, Continuous
-	
+
 	__enable_interrupt(); // Clear the timer and enable timer interrupt
-	
-	analogCalibrate(); // This takes 8 seconds
-	
-	pinMode(26, INPUT);
-	while(digitalRead(26)==LOW){ // wait to pull the pin
-		random(); // so we get a random initial value
-		wait(0.2);
-	}
+
+	//analogCalibrate(); // This takes 8 seconds
 	
 	zMain(); // exicute user code
 	for(;;); // stop after user's code is done
@@ -237,17 +241,17 @@ void main(void){
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void Timer_A(void){ // Timer A0 interrupt service routine
 	int port, bit;
-	zInteruptCounter=(zInteruptCounter + 1) % 5; // 0 to 4
+	zInteruptCounter=(zInteruptCounter + 1) % 20; // 0 to 19
 	for(port=0; port<2; port++){ // loop through ports [0] and [1] (1 and 2)
 		for(bit=0; bit<8; bit++){ // loop through pins 0 to 7
-			if(zAnalogWrite[port][bit]!=DISABLED/20){ // if analog write is enabled
+			if(zAnalogWrite[port][bit]!=DISABLED/5){ // if analog write is enabled
 				int pin;
-				
+
 				switch(port){
 					case 0:pin= 10 + bit; break; // get human readible pin numbers for digitalWrite
 					case 1:pin= 20 + bit;
 				}
-				
+
 				if(zAnalogWrite[port][bit]>zInteruptCounter){ // turn on and off at the right times
 					zDigitalWrite(pin, HIGH);
 				}else{
@@ -255,5 +259,9 @@ __interrupt void Timer_A(void){ // Timer A0 interrupt service routine
 				}
 			}
 		}
+	}
+
+	if(zTime>0) {
+		zTime--;
 	}
 }
