@@ -1,6 +1,6 @@
 What is this?
 ======
-A Wiring-like library for the MSP430 line of chips for abstracting many of the complexities of robot programming in C
+Common Arduino functions as a C Library
 
 How do I use it?
 ======

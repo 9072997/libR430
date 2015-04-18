@@ -1,57 +1,34 @@
-/*
- * libR430.h
- * Copyright (C) 2012  Jon Penn
- *  
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 #ifndef LIBR430_H
 #define LIBR430_H
-////////////////////////////////////////////////////////////////////////
-#define LOW 0
-#define OFF 0
-#define HIGH 100
-#define ON 100
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+#include <util/delay_basic.h>
+#include <avr/interrupt.h>
+#include <stdbool.h>
+#include <util/atomic.h>
 
-#define INPUTFLOAT 0
-#define INPUT 1
-#define OUTPUT 2
+#define wait(seconds) _delay_ms(seconds * 995) // estimate of lost time
+#define HIGH true
+#define LOW false
+#define OUTPUT true
+#define INPUT false
+#define PULSE true
+#define PERCENT false
+#define A0 14
+#define A1 15
+#define A2 16
+#define A3 17
+#define A4 18
+#define A5 19
+void zMain(void);
 
-#define DISABLED 635
+void digitalWrite(uint8_t pin, bool val);
+void pinMode(uint8_t pin, bool mode);
+void analogWrite(uint8_t pin, uint8_t val);
+void analogMode(bool isPulse);
+bool digitalRead(uint8_t pin);
+uint8_t sendPulse(uint8_t triggerPin, uint8_t echoPin);
 
-#define CAL1MHZ -1
-#define CAL8MHZ -2
-#define CAL12MHZ -3
-#define CAL16MHZ -4
-////////////////////////////////////////////////////////////////////////
-#define main() zMain()
-////////////////////////////////////////////////////////////////////////
-#define wait(seconds) wait10Milliseconds((seconds) * 100) // because floating point math at runtime was huge
-////////////////////////////////////////////////////////////////////////
-#ifndef __GNUC__
-#define  __attribute__(x)  /*NOTHING*/
 #endif
-////////////////////////////////////////////////////////////////////////
-void wait10Milliseconds(long);
-void analogWrite(int, int);
-void digitalWrite(int pin, int value);
-void pinMode(int, int);
-int digitalRead(int);
-int analogRead(int);
-int random(void);
-void analogCalibrate(void);
-void setSpeed(int);
-void ready(void);
-void zMain(void); // so that the user's code may follow our own.
-////////////////////////////////////////////////////////////////////////
-#endif
+#define main() zMain() // so user code is not main
