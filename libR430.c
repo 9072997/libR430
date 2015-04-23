@@ -44,7 +44,7 @@ void zDigitalWrite(uint8_t pin, bool isHigh) { // bad form, I know
 			case 18: PORTC |= 0b00010000; break;
 			case 19: PORTC |= 0b00100000; break;
 		}
-		} else {
+	} else {
 		switch(pin) {
 			//   PP      X V    76543210
 			case  3: PORTD &= 0b11110111; break;
@@ -180,14 +180,14 @@ ISR(TIMER1_OVF_vect) {
 uint8_t zInteruptCounter = 0;
 ISR(TIMER0_OVF_vect) {
 	if(!zMode) { // percent mode
-		 zInteruptCounter=(zInteruptCounter + 5) % 100;
-		 for(uint8_t pin=0; pin<20; pin++) {
-			 if(zAnalogVals[pin].isEnabled) { // if analog write is enabled
-				 if(zAnalogVals[pin].val>zInteruptCounter) { // turn on and off at the right times
-						zDigitalWrite(pin, HIGH);
-					} else {
-						zDigitalWrite(pin, LOW);
-				 }
+		zInteruptCounter=(zInteruptCounter + 5) % 100;
+		for(uint8_t pin=0; pin<20; pin++) {
+			if(zAnalogVals[pin].isEnabled) { // if analog write is enabled
+				if(zAnalogVals[pin].val>zInteruptCounter) { // turn on and off at the right times
+					zDigitalWrite(pin, HIGH);
+				} else {
+					zDigitalWrite(pin, LOW);
+				}
 			 }
 		 }
 	 }
@@ -204,12 +204,12 @@ int main(void) {
 	TIMSK1 |= _BV(TOIE1);
 
 	// setup timer 0 for percent mode (prescale 64)
-    // Setting the 64 prescaler
-    TCCR0B |= _BV(CS01) | _BV(CS00);
-    // Initialize Timer0
-    TCNT0 = 0;
-    // Initialize the overflow interrupt for TIMER0
-    TIMSK0 |= _BV(TOIE0);
+	// Setting the 64 prescaler
+	TCCR0B |= _BV(CS01) | _BV(CS00);
+	// Initialize Timer0
+	TCNT0 = 0;
+	// Initialize the overflow interrupt for TIMER0
+	TIMSK0 |= _BV(TOIE0);
 	
 	// Turn interrupts on.
 	sei();
