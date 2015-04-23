@@ -41,6 +41,7 @@ void zMain(void);
 void digitalWrite(uint8_t pin, bool val);
 void pinMode(uint8_t pin, bool mode);
 void analogWrite(uint8_t pin, uint8_t val);
+void motorWrite(uint8_t pin1, uint8_t pin2, uint8_t val);
 void analogMode(bool isPulse);
 bool digitalRead(uint8_t pin);
 uint8_t sendPulse(uint8_t triggerPin, uint8_t echoPin);

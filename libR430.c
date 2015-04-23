@@ -166,6 +166,19 @@ uint8_t sendPulse(uint8_t trigger, uint8_t echo) {
 	}
 	return delay/200; //average
 }
+void motorWrite(uint8_t pin1, uint8_t pin2, uint8_t val) {
+	analogMode(PERCENT);
+	if(val<50) {
+		digitalWrite(pin1, LOW);
+		analogWrite(pin2, (50-val)*2);
+	} else if(val>50) {
+		analogWrite(pin1, (val-50)*2);
+		digitalWrite(pin2, LOW);
+	} else { // stop
+		digitalWrite(pin1, LOW);
+		digitalWrite(pin2, LOW);
+	}
+}
 ISR(TIMER1_OVF_vect) {
 	if(zMode) { // is pulse
 		for(uint8_t pin=0; pin<20; pin++) {
